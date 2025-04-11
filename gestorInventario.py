@@ -23,14 +23,18 @@ class GestorProductos:
         opciones = {
             "0" : "\nOpciones de búsqueda:",
             "1" : "1. Buscar por ID",
-            "2" : "2. Buscar por Nombre",
-            "3" : "3. buscar por precio",
-            "4" : "4. buscar por stock"
+            "2" : "2. buscar por precio",
+            "3" : "3. buscar por stock",
+            "4" : "4. buscar por categoria",
+            "5" : "5. Buscar por Nombre"
         }
 
         columnas = {
-            "1" : "id_producto"
-            "2" : 
+            "1" : "id_producto",
+            "2" : "precio",
+            "3" : "cantidad_stock",
+            "4" : "categoria",
+            "5" : "Nombre"
         }
 
         while True:
@@ -45,7 +49,7 @@ class GestorProductos:
                continue
             else:
                 break             
-            print
+            
 
         condiciones = {}
         match opcion:
@@ -153,11 +157,3 @@ class GestorProductos:
                 break
             else:
                 print("Opción inválida. Por favor, intente de nuevo.")
-
-if __name__ == "__main__":
-    db_manager = baseDatos()
-    if db_manager.conexion.is_connected():
-        gestor = GestorProductos(db_manager)
-        gestor.menu()
-        db_manager.conexion.close()
-        print("🔌 Conexión a la base de datos cerrada.")
