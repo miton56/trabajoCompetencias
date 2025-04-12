@@ -25,7 +25,6 @@ class Cliente:
     def informacion(self):
         return f"nombre: {self.nombre} \n contacto: {self.correo}"
     
-    hola="1"
     
 
 
