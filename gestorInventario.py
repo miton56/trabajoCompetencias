@@ -6,6 +6,7 @@ class GestorProductos:
         self.db = db
         self.tabla = "productos"
 
+    hola = "algo"
     def agregar_producto(self):
         nombre = input("Ingrese el nombre del producto: ")
         descripcion = input("Ingrese la descripción del producto: ")
