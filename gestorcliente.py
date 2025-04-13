@@ -6,6 +6,9 @@ class GestorClientes:
         self.db = db
         self.tabla = "clientes"
 
+
+
+
     def agregar_cliente(self):
         nombre = input("Ingrese el nombre del cliente: ")
         email = input("Ingrese el email del cliente: ")
@@ -22,33 +25,61 @@ class GestorClientes:
     def buscar_cliente(self):
 
         condiciones = {}
-        print("\nOpciones de búsqueda:")
-        print("1. Buscar por ID")
-        print("2. Buscar por Nombre")
-        print("3. Buscar por Email")
-        print("4. Buscar por Rut")
-        opcion = input("Seleccione una opción: ")
+    
+        opciones = {
+            "0" : "\nOpciones de búsqueda:",
+            "1" : "1. Buscar por ID",
+            "2" : "2. Buscar por rut",
+            "3" : "3. Buscar por Nombre",
+            "4" : "4. Buscar por direccion",
+            "5" : "5. Buscar por telefono",
+            "6" : "6. Buscar por correo"
+        }
 
-        match opcion:
-            case '1':
-                try:
+        columnas = {
+            "1" : "id_cliente",
+            "2" : "rut",
+            "3" : "Nombre",
+            "4" : "direccion",
+            "5" : "telefono",
+            "6" : "correo"
+        }
+
+        while True:
+
+            for i in opciones:
+                print(i)
+            opcion = input("Seleccione una opción: ")
+
+            match opcion:
+                case '1':
                     id_cliente = int(input("Ingrese el ID del cliente: "))
-                    condiciones["id_cliente"] = id_cliente
-                except ValueError:
-                    print("ID inválido.")
+                    condiciones[columnas[opcion]] = id_cliente
+                case '2':
+                    rut = input("Ingrese el rut del cliente: ")
+                    condiciones[columnas[opcion]] = rut
+                case '3':
+                    nombre = input("Ingrese el nombre del cliente: ")
+                    condiciones[columnas[opcion]] = nombre
+                case "4":
+                    direccion = input("ingrese la direccion del cliente: ")
+                    condiciones[columnas[opcion]] = direccion
+                case "5":
+                    telefono = input("ingrese el telefono del cliente")
+                    condiciones[columnas[opcion]] = telefono
+                case "6":
+                    correo = input("ingrese el correo del cliente")
+                    condiciones[columnas[opcion]] = correo
+                case _:
+                    print("Opción inválida.")
                     return
-            case '2':
-                nombre = input("Ingrese el nombre del cliente: ")
-                condiciones["nombre"] = nombre
-            case '3':
-                email = input("Ingrese el email del cliente: ")
-                condiciones["email"] = email
-            case "4":
-                rut = input("ingrese el rut del cliente: ")
-                condiciones["rut"] = rut
-            case _:
-                print("Opción inválida.")
-                return
+                
+            agregar = input("quiere agregar una condicion mas?(s/n)\n")
+            if "s" == agregar.lower():
+                del opciones[opcion]
+                continue
+            else:
+                break 
 
         resultados = self.db.buscar(self.tabla, condiciones=condiciones)
         if resultados:
@@ -158,3 +189,4 @@ class GestorClientes:
                 case _:
                     print("Opción inválida. Por favor, intente de nuevo.")
 
+    

@@ -1,5 +1,6 @@
 from gestorcliente import GestorClientes
 from base_datos import baseDatos
+from gestorInventario import GestorProductos
 
 print("""bienvenido al sistema de ventas""")
 
@@ -23,6 +24,12 @@ while True:
         case "1":
             gestorCliente = GestorClientes(base)
             gestorCliente.menu()
+        case "2":
+            gestorProductos = GestorProductos(base)
+            gestorProductos.menu()
+        case "5":
+            break
         case _:
             print("opcion no valida")
+            
             

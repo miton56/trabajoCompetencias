@@ -8,52 +8,80 @@ class GestorProveedor:
 
     def agregar_proveedor(self):
         nombre = input("Ingrese el nombre del proveedor: ")
-        contacto = input("Ingrese el nombre del contacto del proveedor: ")
         telefono = input("Ingrese el teléfono del proveedor: ")
         rut = input("Ingrese el rut del proveedor: ")
-        email = input("Ingrese el email del proveedor: ")
+        correo = input("Ingrese el email del proveedor: ")
         direccion = input("Ingrese la dirección del proveedor: ")
-        valores = [rut, contacto, telefono, email, direccion]
-        columnas = ["nombre", "contacto", "telefono", "email", "direccion"]
+        valores = [rut, nombre, correo, telefono, direccion]
+        columnas = ["rut", "nombre", "correo", "telefono", "direccion"]
         if self.db.insertar(self.tabla, valores, columnas):
             print("Proveedor agregado exitosamente.")
         else:
             print("Error al agregar el proveedor.")
 
     def buscar_proveedor(self):
-        print("\nOpciones de búsqueda:")
-        print("1. Buscar por ID")
-        print("2. Buscar por Nombre")
-        print("3. Buscar por Contacto")
-        print("4. Buscar por Email")
-        opcion = input("Seleccione una opción: ")
-
         condiciones = {}
-        if opcion == '1':
-            try:
-                id_proveedor = int(input("Ingrese el ID del proveedor: "))
-                condiciones["id_proveedor"] = id_proveedor
-            except ValueError:
-                print("❌ ID inválido.")
-                return
-        elif opcion == '2':
-            nombre = input("Ingrese el nombre del proveedor: ")
-            condiciones["nombre"] = nombre
-        elif opcion == '3':
-            contacto = input("Ingrese el nombre del contacto: ")
-            condiciones["contacto"] = contacto
-        elif opcion == '4':
-            email = input("Ingrese el email del proveedor: ")
-            condiciones["email"] = email
-        else:
-            print("❌ Opción inválida.")
-            return
+    
+        opciones = {
+            "0" : "\nOpciones de búsqueda:",
+            "1" : "1. Buscar por ID",
+            "2" : "2. Buscar por rut",
+            "3" : "3. Buscar por Nombre",
+            "4" : "4. Buscar por correo",
+            "5" : "5. Buscar por telefono",
+            "6" : "6. Buscar por direccion"
+        }
+
+        columnas = {
+            "1" : "id_proveedor",
+            "2" : "rut",
+            "3" : "Nombre",
+            "4" : "correo",
+            "5" : "telefono",
+            "6" : "direccion"
+        }
+
+        while True:
+
+            for i in opciones:
+                print(i)
+            opcion = input("Seleccione una opción: ")
+
+            match opcion:
+                case '1':
+                    id_cliente = int(input("Ingrese el ID del proeveedor: "))
+                    condiciones[columnas[opcion]] = id_cliente
+                case '2':
+                    rut = input("Ingrese el rut del proveedor: ")
+                    condiciones[columnas[opcion]] = rut
+                case '3':
+                    nombre = input("Ingrese el nombre del proveedor: ")
+                    condiciones[columnas[opcion]] = nombre
+                case "4":
+                    correo = input("ingrese el correo del proveedor: ")
+                    condiciones[columnas[opcion]] = correo
+                case "5":
+                    telefono = input("ingrese el telefono del proveedor")
+                    condiciones[columnas[opcion]] = telefono
+                case "6":
+                    direccion = input("ingrese la direccion del proveedor")
+                    condiciones[columnas[opcion]] = direccion
+                case _:
+                    print("Opción inválida.")
+                    continue
+                
+            agregar = input("quiere agregar una condicion mas?(s/n)\n")
+            if "s" == agregar.lower():
+                del opciones[opcion]
+                continue
+            else:
+                break 
 
         resultados = self.db.buscar(self.tabla, condiciones=condiciones)
         if resultados:
             print("\nResultados de la búsqueda:")
             for proveedor in resultados:
-                print(f"ID: {proveedor[0]}, Nombre: {proveedor[1]}, Contacto: {proveedor[2]}, Teléfono: {proveedor[3]}, Email: {proveedor[4]}, Dirección: {proveedor[5]}")
+                print(f"ID: {proveedor[0]}, rut: {proveedor[1]}, Nombre: {proveedor[2]}, correo: {proveedor[3]}, telefono: {proveedor[4]}, Dirección: {proveedor[5]}")
         else:
             print("No se encontraron proveedores con los criterios especificados.")
 
@@ -62,7 +90,7 @@ class GestorProveedor:
         if proveedores:
             print("\nLista de proveedores:")
             for proveedor in proveedores:
-                print(f"ID: {proveedor[0]}, Nombre: {proveedor[1]}, Contacto: {proveedor[2]}, Teléfono: {proveedor[3]}, Email: {proveedor[4]}, Dirección: {proveedor[5]}")
+                print(f"ID: {proveedor[0]}, rut: {proveedor[1]}, Nombre: {proveedor[2]}, correo: {proveedor[3]}, telefono: {proveedor[4]}, Dirección: {proveedor[5]}")
         else:
             print("No hay proveedores registrados.")
 
@@ -72,38 +100,38 @@ class GestorProveedor:
             condiciones = {"id_proveedor": id_proveedor}
             proveedor_existente = self.db.buscar(self.tabla, condiciones=condiciones)
             if not proveedor_existente:
-                print("❌ No se encontró un proveedor con ese ID.")
+                print("No se encontró un proveedor con ese ID.")
                 return
 
             print("\nIngrese los nuevos datos del proveedor (deje en blanco para no modificar):")
-            nombre = input(f"Nuevo nombre ({proveedor_existente[0][1]}): ")
-            contacto = input(f"Nuevo contacto ({proveedor_existente[0][2]}): ")
-            telefono = input(f"Nuevo teléfono ({proveedor_existente[0][3]}): ")
-            email = input(f"Nuevo email ({proveedor_existente[0][4]}): ")
+            rut = input(f"Nuevo rut ({proveedor_existente[0][1]}): ")
+            nombre = input(f"Nuevo nombre ({proveedor_existente[0][2]}): ")
+            correo = input(f"Nuevo correo ({proveedor_existente[0][3]}): ")
+            telefono = input(f"Nuevo telefono ({proveedor_existente[0][4]}): ")
             direccion = input(f"Nueva dirección ({proveedor_existente[0][5]}): ")
 
             actualizaciones = {}
-            if nombre:
+            if rut:
                 actualizaciones["nombre"] = nombre
-            if contacto:
-                actualizaciones["contacto"] = contacto
-            if telefono:
+            if nombre:
+                actualizaciones["contacto"] = nombre
+            if correo:
                 actualizaciones["telefono"] = telefono
-            if email:
-                actualizaciones["email"] = email
+            if telefono:
+                actualizaciones["email"] = telefono
             if direccion:
                 actualizaciones["direccion"] = direccion
 
             if actualizaciones:
                 if self.db.actualizar(self.tabla, condiciones, actualizaciones):
-                    print("✅ Proveedor actualizado exitosamente.")
+                    print("Proveedor actualizado exitosamente.")
                 else:
-                    print("❌ Error al actualizar el proveedor.")
+                    print("Error al actualizar el proveedor.")
             else:
                 print("No se ingresaron datos para actualizar.")
 
         except ValueError:
-            print("❌ ID inválido.")
+            print("ID inválido.")
 
     def eliminar_proveedor(self):
         try:
@@ -111,19 +139,19 @@ class GestorProveedor:
             condiciones = {"id_proveedor": id_proveedor}
             proveedor_existente = self.db.buscar(self.tabla, condiciones=condiciones)
             if not proveedor_existente:
-                print("❌ No se encontró un proveedor con ese ID.")
+                print("No se encontró un proveedor con ese ID.")
                 return
 
             confirmacion = input(f"¿Está seguro de que desea eliminar al proveedor con ID {id_proveedor}? (s/n): ")
             if confirmacion.lower() == 's':
                 if self.db.eliminar(self.tabla, condiciones):
-                    print("✅ Proveedor eliminado exitosamente.")
+                    print("Proveedor eliminado exitosamente.")
                 else:
-                    print("❌ Error al eliminar el proveedor.")
+                    print("Error al eliminar el proveedor.")
             else:
                 print("Operación de eliminación cancelada.")
         except ValueError:
-            print("❌ ID inválido.")
+            print(" ID inválido.")
 
     def menu(self):
         while True:
@@ -137,26 +165,19 @@ class GestorProveedor:
 
             opcion = input("Seleccione una opción: ")
 
-            if opcion == '1':
-                self.agregar_proveedor()
-            elif opcion == '2':
-                self.buscar_proveedor()
-            elif opcion == '3':
-                self.listar_proveedores()
-            elif opcion == '4':
-                self.actualizar_proveedor()
-            elif opcion == '5':
-                self.eliminar_proveedor()
-            elif opcion == '6':
-                print("Saliendo del gestor de proveedores.")
-                break
-            else:
-                print("Opción inválida. Por favor, intente de nuevo.")
-
-if __name__ == "__main__":
-    db_manager = baseDatos()
-    if db_manager.conexion.is_connected():
-        gestor = GestorProveedores(db_manager)
-        gestor.menu()
-        db_manager.conexion.close()
-        print("🔌 Conexión a la base de datos cerrada.")
+            match opcion:
+                case "1":
+                    self.agregar_proveedor()
+                case "2":
+                    self.buscar_proveedor()
+                case "3":
+                    self.listar_proveedores()
+                case "4":
+                    self.actualizar_proveedor()
+                case "5":
+                    self.eliminar_proveedor()
+                case "6":
+                    print("Saliendo del gestor de proveedores.")
+                    break
+                case _:
+                     print("Opción inválida. Por favor, intente de nuevo.")
