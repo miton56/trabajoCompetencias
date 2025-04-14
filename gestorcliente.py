@@ -48,7 +48,7 @@ class GestorClientes:
         while True:
 
             for i in opciones:
-                print(i)
+                print(opciones[i])
             opcion = input("Seleccione una opción: ")
 
             match opcion:

@@ -2,6 +2,7 @@ import mysql.connector
 from mysql.connector import Error
 from base_datos import baseDatos
 from enum import Enum
+from gestorproveedor import GestorProveedor
 
 class GestorProductos:
     def __init__(self, db):
@@ -9,19 +10,31 @@ class GestorProductos:
         self.tabla = "productos"
         self.Categorias = Enum("categorias", self.CategoriasBase())
 
-    hola = "algo"
     def agregar_producto(self):
+        Proveedores = GestorProveedor(self.db)
         nombre = input("Ingrese el nombre del producto: ")
         descripcion = input("Ingrese la descripción del producto: ")
         precio = input("Ingrese el precio del producto: ")
         stock = input("Ingrese el stock del producto: ")
+        busqueda_proveedor = Proveedores.listar_proveedores(False)
+        ids = []
+        for proveedor in busqueda_proveedor:
+                    ids.append(proveedor[0])
+                    print(f"ID: {proveedor[0]}, Nombre: {proveedor[2]}")
+        while True:
+            print("elija el id del proveedor del producto")
+            proveedor_producto = input(": ")
+            if proveedor_producto in ids:
+                break
+            else:
+                print("elija un id valido")
         print("elija una categoria")
         for i in self.Categorias:
             print(f"{i.value}. {i.name}")
         eleccion = input()
         categoria = self.Categorias(int(eleccion)).name
-        valores = [nombre, descripcion, precio, stock, categoria]
-        columnas = ["nombre", "descripcion", "precio", "cantidad_stock", "categoria"]
+        valores = [nombre, descripcion, precio, stock, categoria, proveedor_producto]
+        columnas = ["nombre", "descripcion", "precio", "cantidad_stock", "categoria", "id_proveedor"]
         if self.db.insertar(self.tabla, valores, columnas):
             print("Producto agregado exitosamente.")
         else:
@@ -35,7 +48,8 @@ class GestorProductos:
             "2" : "2. buscar por precio",
             "3" : "3. buscar por stock",
             "4" : "4. buscar por categoria",
-            "5" : "5. Buscar por Nombre"
+            "5" : "5. Buscar por Nombre",
+            "6" : "6. buscar por id proveedor"
         }
 
         columnas = {
@@ -43,7 +57,8 @@ class GestorProductos:
             "2" : "precio",
             "3" : "cantidad_stock",
             "4" : "categoria",
-            "5" : "Nombre"
+            "5" : "Nombre",
+            "6" : "id_proveedor"
         }
 
         condiciones = {}
@@ -86,7 +101,7 @@ class GestorProductos:
         if resultados:
             print("\nResultados de la búsqueda:")
             for producto in resultados:
-                print(f"ID: {producto[0]}, Nombre: {producto[5]}, Descripción: {producto[1]}, Precio: {producto[2]}, Stock: {producto[3]}, categoria: {producto[4]}")
+                print(f"ID: {producto[0]}, Nombre: {producto[5]}, Descripción: {producto[1]}, Precio: {producto[2]}, Stock: {producto[3]}, categoria: {producto[4]}, id proveedor: {producto[6]}")
         else:
             print("No se encontraron productos con los criterios especificados.")
 
@@ -95,7 +110,7 @@ class GestorProductos:
         if productos:
             print("\nLista de productos:")
             for producto in productos:
-                print(f"ID: {producto[0]}, Nombre: {producto[5]}, Descripción: {producto[1]}, Precio: {producto[2]}, Stock: {producto[3]}, categoria: {producto[4]}")
+                print(f"ID: {producto[0]}, Nombre: {producto[5]}, Descripción: {producto[1]}, Precio: {producto[2]}, Stock: {producto[3]}, categoria: {producto[4]}, id proveedor: {producto[6]}")
         else:
             print("No hay productos registrados.")
 

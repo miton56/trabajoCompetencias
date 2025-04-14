@@ -44,7 +44,7 @@ class GestorProveedor:
         while True:
 
             for i in opciones:
-                print(i)
+                print(opciones[i])
             opcion = input("Seleccione una opción: ")
 
             match opcion:
@@ -79,20 +79,28 @@ class GestorProveedor:
 
         resultados = self.db.buscar(self.tabla, condiciones=condiciones)
         if resultados:
-            print("\nResultados de la búsqueda:")
-            for proveedor in resultados:
-                print(f"ID: {proveedor[0]}, rut: {proveedor[1]}, Nombre: {proveedor[2]}, correo: {proveedor[3]}, telefono: {proveedor[4]}, Dirección: {proveedor[5]}")
+                print("\nResultados de la búsqueda:")
+                for proveedor in resultados:
+                    print(f"ID: {proveedor[0]}, rut: {proveedor[1]}, Nombre: {proveedor[2]}, correo: {proveedor[3]}, telefono: {proveedor[4]}, Dirección: {proveedor[5]}")
         else:
             print("No se encontraron proveedores con los criterios especificados.")
 
-    def listar_proveedores(self):
-        proveedores = self.db.buscar(self.tabla)
-        if proveedores:
-            print("\nLista de proveedores:")
-            for proveedor in proveedores:
-                print(f"ID: {proveedor[0]}, rut: {proveedor[1]}, Nombre: {proveedor[2]}, correo: {proveedor[3]}, telefono: {proveedor[4]}, Dirección: {proveedor[5]}")
+    def listar_proveedores(self, imprimir=True):
+        if imprimir:
+            proveedores = self.db.buscar(self.tabla)
+            if proveedores:
+                print("\nLista de proveedores:")
+                for proveedor in proveedores:
+                    print(f"ID: {proveedor[0]}, rut: {proveedor[1]}, Nombre: {proveedor[2]}, correo: {proveedor[3]}, telefono: {proveedor[4]}, Dirección: {proveedor[5]}")
+            else:
+                print("No hay proveedores registrados.")
         else:
-            print("No hay proveedores registrados.")
+            proveedores = self.db.buscar(self.tabla)
+            if proveedores:
+                return proveedores
+            else:
+                print("No hay proveedores registrados.")
+
 
     def actualizar_proveedor(self):
         try:
