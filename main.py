@@ -3,6 +3,7 @@ from base_datos import baseDatos
 from gestorInventario import GestorProductos
 from gestorproveedor import GestorProveedor
 from gestorReporte import gestorReporte
+from gestorVenta import GestorVenta
 
 print("""bienvenido al sistema de ventas""")
 
@@ -33,6 +34,9 @@ while True:
         case "3":
             gestorProveedor = GestorProveedor(base)
             gestorProveedor.menu()
+        case "4":
+            gestorVenta = GestorVenta(base)
+            gestorVenta.menu()
         case "5":
             gestorReportes = gestorReporte(base)
             gestorReportes.menu()

@@ -5,6 +5,7 @@ from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 import os
 from decimal import Decimal
+from datetime import datetime
 
 
 class gestorReporte:
@@ -12,15 +13,26 @@ class gestorReporte:
     def __init__(self, db):
         self.db = db
 
-    def reportePDF(self):
+    def reporte_ventas(self):
         
+        informacion = self.db.buscar("ventas_por_producto")
+
+        columnas = ['Producto', 'precio unitario', 'unidades vendidas', 'cantidad de ventas', 'total vendido', 'stock en dinero']
+
+        self.generarReportePDf(columnas=columnas, informacion=informacion, nombre_reporte="reporte_inventario")
+        
+    
+    def generarReportePDf(self, columnas, informacion, nombre_reporte):
+
+        ahora = datetime.now()
+        fecha = ahora.strftime("%Y-%m-%d %H:%M:%S")
+
         carpeta_destino = "./reportes" 
         if not os.path.exists(carpeta_destino): 
             os.makedirs(carpeta_destino)
-        pdf_Nombre = os.path.join(carpeta_destino, "reporte_inventario.pdf")
+        pdf_Nombre = os.path.join(carpeta_destino, f"{nombre_reporte} {fecha}.pdf")
         doc = SimpleDocTemplate(pdf_Nombre, pagesize=letter)
-        informacion = self.db.buscar("ventas_por_producto")
-        datos = [['Producto', 'precio unitario', 'unidades vendidas', 'cantidad de ventas', 'total vendido', 'stock en dinero']]
+        datos = [columnas]
 
 
         for filas in informacion:
@@ -33,7 +45,7 @@ class gestorReporte:
                 elif type(i) is int:
                     formateado = f"{i:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
                     lista_base.append((formateado))
-                else:
+                else:   
                     lista_base.append((i))
             datos.append(lista_base)
         
@@ -52,7 +64,9 @@ class gestorReporte:
         elements = [table]
         doc.build(elements)
 
-        print(f"reporte '{pdf_Nombre}' creado correctamente en la carpeta '{carpeta_destino}'.")
+        print(f"reporte '{nombre_reporte}' creado correctamente en la carpeta '{carpeta_destino}'.")
+
+
     
     def menu(self):
         while True:
@@ -71,14 +85,3 @@ class gestorReporte:
                     break
 
 
-
-
-
-
-
-
-
-
-gestor = gestorReporte(baseDatos())
-
-gestor.reportePDF()

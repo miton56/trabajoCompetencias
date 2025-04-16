@@ -229,4 +229,4 @@ class baseDatos():
 
 prueba = baseDatos()
 
-print(prueba.eliminar("clientes", {"nombre" : "simon", "id_cliente" : 12}))
+print(prueba.buscar("productos", condiciones={"id_producto" : 1}))
