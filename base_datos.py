@@ -42,6 +42,7 @@ class baseDatos():
             try:
                 cursor.execute(sql, valores)
                 resultado = cursor.fetchall()
+                conexion.close()
                 return resultado
             except Error as e:
                 print("error al realizar la busqueda " + str(e))
@@ -215,6 +216,7 @@ class baseDatos():
         try:
             cursor.execute(sql, valores)
             conexion.commit()
+            conexion.close()
             return True
         except Error as e:
             print("error al realizar la actualizacion " + str(e))
@@ -224,7 +226,25 @@ class baseDatos():
                 conexion.close()
 
         return
-    
+
+    def ultimo_id(self):
+        try:
+            conexion = mysql.connector.connect(host="db-competencias.c3u4i2g2yefp.us-east-2.rds.amazonaws.com",
+                                        user="admin",
+                                            password="Juanpablo123",
+                                            port=3306,
+                                            database="trabajo")
+            print("✅ Conexión exitosa")
+            cursor = conexion.cursor()
+        except mysql.connector.Error as err:
+            print("Error al conectar:", err)
+            return
+        
+        cursor.execute("select LAST_INSERT_ID()")
+        id = cursor.fetchall()
+        conexion.close()
+        return id
+
 
 
 prueba = baseDatos()

@@ -25,7 +25,7 @@ class gestorReporte:
     def generarReportePDf(self, columnas, informacion, nombre_reporte):
 
         ahora = datetime.now()
-        fecha = ahora.strftime("%Y-%m-%d %H:%M:%S")
+        fecha = ahora.strftime("%Y-%m-%d_%H-%M-%S")
 
         carpeta_destino = "./reportes" 
         if not os.path.exists(carpeta_destino): 
@@ -79,7 +79,7 @@ class gestorReporte:
 
             match opcion:
                 case "1":
-                    self.reportePDF()
+                    self.reporte_ventas()
                 case "6":
                     print("saliendo")
                     break

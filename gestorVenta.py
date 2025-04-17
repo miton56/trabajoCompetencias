@@ -127,6 +127,29 @@ class GestorVenta():
 
                 productos_final = []
 
+                self.base.insertar("ventas", [cliente[0][0], total, "pagado"], ["id_cliente", "monto_total", "estado"])
+
+                id_venta = self.base.buscar("ventas", columnas = "id_venta")
+
+                lista_ordenada = [item[0] for item in id_venta]
+    
+                # Ordenar la lista de mayor a menor
+                lista_ordenada.sort()
+
+                print(lista_ordenada)
+
+                input("")
+
+                id_venta_final = lista_ordenada[-1]
+
+                for metodo in metodos_pago:
+
+                    self.base.insertar("detalle_metodo_pago", [metodo[0], id_venta_final, (porcentajes[metodo[1]] * total)], ["id_metodo_pago", "id_venta", "monto_pagado"])
+                
+                for prod, cant in zip(productos, cantidades):
+
+                    self.base.insertar("detalle_ventas", [prod[0], id_venta_final, cant, prod[2], (int(cant) * int(prod[2]))], ["id_producto", "id_venta", "cantidad", "precio_unitario", "subtotal"])
+
                 for prod, cant in zip(productos, cantidades):
                     productos_final.append({"nombre": prod[5], "cantidad": cant, "precio": prod[2]})
                 metodos_final = []
@@ -142,6 +165,7 @@ class GestorVenta():
                     continue
                 else:
                     break
+            
                 
 
 
