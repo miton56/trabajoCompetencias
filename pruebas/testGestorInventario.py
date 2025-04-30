@@ -28,14 +28,14 @@ class TestGestorProductos(unittest.TestCase):
         self.db_mock.buscar.reset_mock()
     
     @patch('builtins.input')
-    @patch('gestorproveedor.GestorProveedor')
+    @patch('gestorInventario.GestorProveedor')
     def test_agregar_producto(self, gestor_proveedor_mock, input_mock):
         # Mock para el GestorProveedor
         gestor_proveedor_instance = MagicMock()
         gestor_proveedor_mock.return_value = gestor_proveedor_instance
         
         # Configurar el mock para listar_proveedores
-        gestor_proveedor_instance.listar_proveedores.return_value = [(1, '76451234-5', 'Distribuidora El Sol')]
+        gestor_proveedor_instance.listar_proveedores.return_value = [("1", '76451234-5', 'Distribuidora El Sol')]
         
         # Configurar respuestas para los inputs
         if self.TEST_MODE == "BÁSICO":
@@ -94,7 +94,7 @@ class TestGestorProductos(unittest.TestCase):
             input_mock.side_effect = ['1', '1', 'n']  # Buscar por ID
         
         # Configurar resultado de búsqueda
-        producto_ejemplo = [(1, 'Smartphone de última gen', 200000, 10, 'Tecnología', 'Smartphone XYZ', 1)]
+        producto_ejemplo = [("1", 'Smartphone de última gen', "200000", "10", 'Tecnología', 'Smartphone XYZ', "1")]
         self.db_mock.buscar.return_value = producto_ejemplo
         
         # Ejecutar la búsqueda
@@ -117,8 +117,8 @@ class TestGestorProductos(unittest.TestCase):
     def test_listar_productos(self, print_mock):
         # Configurar datos de prueba
         productos = [
-            (1, 'Smartphone de última gen', 200000, 10, 'Tecnología', 'Smartphone XYZ', 1),
-            (2, 'Notebook potente', 500000, 5, 'Computación', 'Notebook ABC', 2)
+            (1, 'Smartphone de última gen', "200000", "10", 'Tecnología', 'Smartphone XYZ', "1"),
+            (2, 'Notebook potente', "500000", "5", 'Computación', 'Notebook ABC', "2")
         ]
         
         # Configurar el mock para que devuelva los productos
@@ -136,7 +136,7 @@ class TestGestorProductos(unittest.TestCase):
         id_producto = 1
         
         # Producto existente en la base de datos
-        producto_existente = [(1, 'Smartphone de última gen', 200000, 10, 'Tecnología', 'Smartphone XYZ', 1)]
+        producto_existente = [(1, 'Smartphone de última gen', "200000", "10", 'Tecnología', 'Smartphone XYZ', "1")]
         
         # Configurar entradas del usuario
         if self.TEST_MODE == "BÁSICO":
@@ -183,7 +183,7 @@ class TestGestorProductos(unittest.TestCase):
         id_producto = 1
         
         # Producto existente en la base de datos
-        producto_existente = [(1, 'Smartphone de última gen', 200000, 10, 'Tecnología', 'Smartphone XYZ', 1)]
+        producto_existente = [(1, 'Smartphone de última gen', "200000", "10", 'Tecnología', 'Smartphone XYZ', "1")]
         
         # Configurar entradas del usuario: ID y confirmación
         input_mock.side_effect = [str(id_producto), 's']

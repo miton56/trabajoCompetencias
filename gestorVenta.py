@@ -96,11 +96,16 @@ class GestorVenta():
 
                 if siclo == 2:
                     break
+    
 
                 seguir = input("quiere agregar otro metodo de pago? (maximo 2) (s/n) : ")
 
-                if seguir.lower() != "s":
+                if seguir.lower() == "n":
                     break
+                elif seguir.lower() == "s":
+                    continue
+                else:
+                    print("ingrese una opcion valida")
             
             porcentajes = {}
 

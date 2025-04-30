@@ -26,7 +26,7 @@ class Cliente:
         return f"nombre: {self.nombre} \n contacto: {self.correo}"
     
     
-
+hola = 1
 
     
 

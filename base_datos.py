@@ -246,7 +246,3 @@ class baseDatos():
         return id
 
 
-
-prueba = baseDatos()
-
-print(prueba.buscar("productos", condiciones={"id_producto" : 1}))
